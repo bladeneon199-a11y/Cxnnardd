@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cxnnard - Streamer Oficial</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-purple: #6441a5;
+            --secondary-purple: #9146ff;
+            --accent-cyan: #00f5ff;
+            --accent-pink: #ff1493;
+            --dark-bg: #0d1117;
+            --darker-bg: #010409;
+            --text-light: #f0f6fc;
+            --text-gray: #8b949e;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, var(--secondary-purple) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--accent-cyan) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, var(--accent-pink) 0%, transparent 50%);
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(13, 17, 23, 0.98);
+            box-shadow: 0 4px 20px rgba(100, 65, 165, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--secondary-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 20px var(--accent-cyan));
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary-purple), var(--accent-cyan));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(100, 65, 165, 0.1), rgba(0, 245, 255, 0.05));
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--secondary-purple), var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px var(--secondary-purple)); }
+            to { filter: drop-shadow(0 0 30px var(--accent-cyan)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--secondary-purple), var(--primary-purple));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, var(--accent-pink), var(--secondary-purple));
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-cyan);
+            color: var(--dark-bg);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--accent-cyan);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-purple), var(--accent-cyan));
+            margin: 1rem auto;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            background: linear-gradient(45deg, var(--secondary-purple), var(--accent-cyan));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-image::before {
+            content: '🎮';
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        /* Stream Schedule */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .schedule-day {
+            background: rgba(100, 65, 165, 0.1);
+            border: 1px solid rgba(145, 70, 255, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .schedule-day::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 245, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .schedule-day:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50px, 50px);
+        }
+
+        .schedule-day:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+        }
+
+        .day-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-cyan);
+        }
+
+        .day-time {
+            color: var(--text-gray);
+        }
+
+        /* Social Links */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-card {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid rgba(145, 70, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .social-card:hover::before {
+            left: 100%;
+        }
+
+        .social-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .social-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-cyan);
+        }
+
+        .social-desc {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker-bg);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(145, 70, 255, 0.3);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--secondary-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* Live indicator */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 20, 147, 0.2);
+            border: 1px solid var(--accent-pink);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">CXNNARD</a>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#about">Sobre Mí</a></li>
+                <li><a href="#schedule">Horarios</a></li>
+                <li><a href="#social">Social</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                EN VIVO AHORA
+            </div>
+            <h1 class="hero-title">CXNNARD</h1>
+            <p class="hero-subtitle">Streamer Gaming • Entretenimiento • Comunidad</p>
+            <div class="cta-buttons">
+                <a href="https://www.twitch.tv/cxnnard" class="btn btn-primary" target="_blank">Ver Stream</a>
+                <a href="#about" class="btn btn-secondary">Conocer Más</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <h2 class="section-title">Sobre Mí</h2>
+        <div class="about-content">
+            <div class="profile-image"></div>
+            <div class="about-text">
+                <p>Soy un mero weón que busca sacar sonrisas. Todos los días (excepto miércoles y domingos), en stream a las 17:00 p.m. (hora argenta) :P.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="schedule" class="section">
+        <h2 class="section-title">Horario de Streams</h2>
+        <div class="schedule-grid">
+            <div class="schedule-day">
+                <div class="day-name">LUNES</div>
+                <div class="day-time">20:00 - 23:00</div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-name">MARTES</div>
+                <div class="day-time">20:00 - 23:00</div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-name">MIÉRCOLES</div>
+                <div class="day-time">Descanso</div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-name">JUEVES</div>
+                <div class="day-time">20:00 - 23:00</div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-name">VIERNES</div>
+                <div class="day-time">19:00 - 24:00</div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-name">SÁBADO</div>
+                <div class="day-time">19:00 - 24:00</div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-name">DOMINGO</div>
+                <div class="day-time">18:00 - 22:00</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="social" class="section">
+        <h2 class="section-title">Redes Sociales</h2>
+        <div class="social-grid">
+            <div class="social-card">
+                <div class="social-icon">📺</div>
+                <div class="social-title">Twitch</div>
+                <p class="social-desc">Stream principal y contenido en vivo</p>
+                <a href="https://www.twitch.tv/cxnnard" class="btn btn-primary" target="_blank">Seguir en Twitch</a>
+            </div>
+            <div class="social-card">
+                <div class="social-icon">📱</div>
+                <div class="social-title">Discord</div>
+                <p class="social-desc">Únete a nuestra comunidad oficial</p>
+                <a href="https://discord.gg/f9Kxydrx" class="btn btn-secondary">Unirse al Discord</a>
+            </div>
+            <div class="social-card">
+                <div class="social-icon">🐦</div>
+                <div class="social-title">Twitter</div>
+                <p class="social-desc">Actualizaciones y momentos destacados</p>
+                <a href="https://x.com/Cxnn4rd" class="btn btn-secondary">Seguir en Twitter</a>
+            </div>
+            <div class="social-card">
+                <div class="social-icon">📸</div>
+                <div class="social-title">Instagram</div>
+                <p class="social-desc">Contenido detrás de cámaras</p>
+                <a href="https://x.com/Cxnn4rd" class="btn btn-secondary">Seguir en Instagram</a>
+            </div>
+            <div class="social-card">
+                <div class="social-icon">🎥</div>
+                <div class="social-title">YouTube</div>
+                <p class="social-desc">VODs y contenido exclusivo</p>
+                <a href="https://www.youtube.com/channel/UCJ4L7Aqb-Ii0QAQTb1YKzFQ" class="btn btn-secondary">Suscribirse</a>
+            </div>
+            <div class="social-card">
+                <div class="social-icon">💬</div>
+                <div class="social-title">TikTok</div>
+                <p class="social-desc">Clips divertidos y momentos épicos</p>
+                <a href="https://www.tiktok.com/@cxnnard" class="btn btn-secondary">Seguir en TikTok</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">CXNNARD</div>
+            <p>&copy; 2025 Cxnnard. Todos los derechos reservados.</p>
+            <p>Hecho con ❤️ por matashiro</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                const speed = scrolled * 0.5;
+                hero.style.transform = `translateY(${speed}px)`;
+            }
+        });
+
+        // Dynamic live indicator (simulate live status)
+        function updateLiveStatus() {
+            const liveIndicator = document.querySelector('.live-indicator');
+            const isLive = Math.random() > 0.7; // 30% chance of being live
+            
+            if (isLive) {
+                liveIndicator.style.display = 'inline-flex';
+            } else {
+                liveIndicator.innerHTML = '<div class="live-dot" style="background: #666;"></div>OFFLINE';
+                liveIndicator.style.borderColor = '#666';
+                liveIndicator.style.background = 'rgba(102, 102, 102, 0.2)';
+            }
+        }
+
+        // Update live status every 30 seconds
+        updateLiveStatus();
+        setInterval(updateLiveStatus, 30000);
+    </script>
+</body>
+</html>
